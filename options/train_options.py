@@ -1,5 +1,5 @@
 from .base_options import BaseOptions
-
+import json
 
 class TrainOptions(BaseOptions):
     """This class includes training options.
@@ -35,6 +35,11 @@ class TrainOptions(BaseOptions):
         parser.add_argument('--pool_size', type=int, default=50, help='the size of image buffer that stores previously generated images')
         parser.add_argument('--lr_policy', type=str, default='linear', help='learning rate policy. [linear | step | plateau | cosine]')
         parser.add_argument('--lr_decay_iters', type=int, default=50, help='multiply by a gamma every lr_decay_iters iterations')
+        # early stop options
+        parser.add_argument('--es_conditions', type=json.loads, default="{}", help='stop conditions , json with name_of_loss:max change or name_of_loss : [min,max] values')
+        parser.add_argument('--es_mem', type=int, default=3, help='number of previous losses considered')
+        parser.add_argument('--es_all', action='store_true', help='early stop if all conditions fulfilled (otherwise stop on any fulfilled)')
+        parser.add_argument('--es_iter', type=int, default=0, help='check after each number of iterations (if <=0 check after each epoch , default -1)')
 
         self.isTrain = True
         return parser
